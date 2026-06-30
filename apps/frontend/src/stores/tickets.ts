@@ -14,7 +14,7 @@ export interface Ticket {
 const MOCK_TICKETS: Ticket[] = [
   {
     _id: 'ticket-1',
-    movieTitle: 'El último horizonte',
+    movieTitle: 'Kimetsu no Yaiba: El Castillo Infinito',
     sala: 'Sala 1',
     fechaHora: '2026-07-05T20:30:00',
     seats: ['A4', 'B6'],
@@ -24,7 +24,7 @@ const MOCK_TICKETS: Ticket[] = [
   },
   {
     _id: 'ticket-2',
-    movieTitle: 'Sombras del norte',
+    movieTitle: 'Jujutsu Kaisen: Ejecución',
     sala: 'Sala 2',
     fechaHora: '2026-06-28T18:00:00',
     seats: ['C7'],
