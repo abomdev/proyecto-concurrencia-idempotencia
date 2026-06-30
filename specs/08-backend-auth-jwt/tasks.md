@@ -38,10 +38,7 @@ MongoDB Atlas ofrece un cluster gratuito (M0) sin tarjeta de crédito.
     mongodb+srv://crunchymark-admin:<password>@crunchymark.xxxxx.mongodb.net/?retryWrites=true&w=majority
     ```
 16. Reemplazar `<password>` con la contraseña del paso 9
-17. Agregar el nombre de la base de datos antes del `?`:
-    ```
-    mongodb+srv://crunchymark-admin:TU_PASSWORD@crunchymark.xxxxx.mongodb.net/crunchymark?retryWrites=true&w=majority
-    ```
+17. Agregar el nombre de la base de datos antes del `?` (ver `.env.example` como referencia)
 
 Guarda esta URI — la vas a necesitar en el paso siguiente.
 
@@ -49,13 +46,7 @@ Guarda esta URI — la vas a necesitar en el paso siguiente.
 
 ## Tarea 1 — Crear el archivo `.env`
 
-Crear el archivo `.env` en la raíz del proyecto (junto al `pnpm-workspace.yaml`):
-
-```
-MONGODB_URI=mongodb+srv://crunchymark-admin:TU_PASSWORD@crunchymark.xxxxx.mongodb.net/crunchymark?retryWrites=true&w=majority
-JWT_SECRET=crunchymark_jwt_secret_2026_cambiar_en_produccion
-PORT=3000
-```
+Crear `apps/backend/.env` con las variables del `.env.example` y completar con tu URI y credenciales reales.
 
 > **Importante:** `.env` ya está en el `.gitignore` — nunca se sube al repositorio.
 
