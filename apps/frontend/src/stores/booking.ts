@@ -22,6 +22,7 @@ export const useBookingStore = defineStore('booking', {
   state: () => ({
     selectedSeats: [] as string[],
     seatStates: MOCK_SEAT_STATES as Record<string, Record<string, SeatState>>,
+    currentShowtimeId: null as string | null,
   }),
   getters: {
     totalAsientos: (state): number => state.selectedSeats.length,
@@ -43,6 +44,7 @@ export const useBookingStore = defineStore('booking', {
     },
     clearSelection() {
       this.selectedSeats = []
+      this.currentShowtimeId = null
     },
   },
 })

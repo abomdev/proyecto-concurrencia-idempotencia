@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onUnmounted } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
@@ -148,9 +148,12 @@ function formatearPrecio(precio: number): string {
   }).format(precio)
 }
 
-// Limpia la selección al salir de la pantalla
-onUnmounted(() => {
-  bookingStore.clearSelection()
+onMounted(() => {
+  // Si el usuario entra a una función diferente a la que tenía seleccionada, limpia la selección anterior
+  if (bookingStore.currentShowtimeId !== showtimeId) {
+    bookingStore.clearSelection()
+  }
+  bookingStore.currentShowtimeId = showtimeId
 })
 </script>
 

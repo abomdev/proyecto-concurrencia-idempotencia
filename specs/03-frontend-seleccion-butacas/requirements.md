@@ -3,8 +3,8 @@
 ## Estado
 - [x] Borrador
 - [x] Aprobado por el usuario
-- [ ] En implementación
-- [ ] Completado
+- [x] En implementación
+- [x] Completado
 
 ## Contexto
 Esta es la pantalla núcleo del proyecto. Es donde ocurre el problema que el sistema resuelve: dos usuarios eligiendo la misma butaca al mismo tiempo. Aunque en esta fase los datos son mock (sin backend todavía), el componente `SeatButton` ya debe soportar los tres estados visuales que existirán en producción. La pantalla muestra el mapa de la sala, permite seleccionar butacas disponibles, y lleva al checkout.
