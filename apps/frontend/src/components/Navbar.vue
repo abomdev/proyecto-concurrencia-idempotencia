@@ -1,20 +1,49 @@
 <template>
   <Toolbar class="navbar">
     <template #start>
-      <span class="navbar__logo">
+      <RouterLink to="/" class="navbar__logo">
         <i class="pi pi-video" />
         Crunchymark
-      </span>
+      </RouterLink>
     </template>
     <template #end>
-      <Button label="Iniciar sesión" icon="pi pi-user" severity="secondary" outlined />
+      <Button
+        v-if="!authStore.isAuthenticated"
+        label="Iniciar sesión"
+        icon="pi pi-user"
+        severity="secondary"
+        outlined
+        @click="router.push('/login')"
+      />
+
+      <div v-else class="navbar__usuario">
+        <span class="navbar__nombre">Hola, {{ authStore.user?.nombre }}</span>
+        <Button
+          icon="pi pi-sign-out"
+          severity="secondary"
+          text
+          rounded
+          aria-label="Cerrar sesión"
+          @click="cerrarSesion"
+        />
+      </div>
     </template>
   </Toolbar>
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
 import Toolbar from 'primevue/toolbar'
 import Button from 'primevue/button'
+import { useAuthStore } from '../stores/auth'
+
+const router = useRouter()
+const authStore = useAuthStore()
+
+function cerrarSesion() {
+  authStore.logout()
+  router.push('/')
+}
 </script>
 
 <style scoped>
@@ -34,5 +63,18 @@ import Button from 'primevue/button'
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+.navbar__usuario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.navbar__nombre {
+  font-size: 0.9rem;
+  color: var(--p-text-muted-color);
 }
 </style>

@@ -55,7 +55,7 @@
           <template #title>Resumen</template>
           <template #content>
             <div v-if="bookingStore.totalAsientos === 0" class="butacas__resumen-vacio">
-              Seleccioná una butaca del mapa.
+              Selecciona una butaca del mapa.
             </div>
 
             <div v-else class="butacas__resumen-lista">
