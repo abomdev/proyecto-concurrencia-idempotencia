@@ -3,8 +3,8 @@
 ## Estado
 - [x] Borrador
 - [x] Aprobado por el usuario
-- [ ] En implementación
-- [ ] Completado
+- [x] En implementación
+- [x] Completado
 
 ## Contexto
 Antes de escribir una sola línea de la aplicación, necesitamos un monorepo bien estructurado. Un monorepo es un único repositorio Git que contiene múltiples proyectos relacionados (en este caso, el frontend y el backend). Usar pnpm workspaces nos permite que ambos compartan dependencias, tengan scripts globales y se lancen con un solo comando desde la raíz. Esta base determina la calidad de todo lo que viene después: si está bien hecha, nunca vamos a tener que tocarla de nuevo.
