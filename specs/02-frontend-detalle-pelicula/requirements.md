@@ -3,8 +3,8 @@
 ## Estado
 - [x] Borrador
 - [x] Aprobado por el usuario
-- [ ] En implementación
-- [ ] Completado
+- [x] En implementación
+- [x] Completado
 
 ## Contexto
 Cuando el usuario hace click en una película de la cartelera, llega a esta pantalla. Su función es dos cosas: mostrar la información completa de la película y permitir al usuario elegir una función (día + horario + sala) para continuar al selector de butacas. Es el puente entre la cartelera y la pantalla de reserva.
