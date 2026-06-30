@@ -1,0 +1,13 @@
+{
+  "name": "crunchymark",
+  "private": true,
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter frontend dev\" \"pnpm --filter backend dev\"",
+    "build": "pnpm --filter frontend build && pnpm --filter backend build",
+    "lint": "pnpm --filter frontend lint && pnpm --filter backend lint"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.0"
+  }
+}

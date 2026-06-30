@@ -1,0 +1,15 @@
+# Dependencias
+node_modules/
+
+# Variables de entorno reales (nunca al repositorio)
+.env
+.env.*.local
+
+# Builds
+dist/
+build/
+
+# Archivos locales de editores y sistemas operativos
+*.local
+.DS_Store
+Thumbs.db
