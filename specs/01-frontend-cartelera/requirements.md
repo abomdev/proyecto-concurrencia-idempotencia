@@ -3,8 +3,8 @@
 ## Estado
 - [x] Borrador
 - [x] Aprobado por el usuario
-- [ ] En implementación
-- [ ] Completado
+- [x] En implementación
+- [x] Completado
 
 ## Contexto
 La cartelera es la pantalla de entrada del sistema. Es lo primero que ve cualquier usuario al abrir Crunchymark. Su función es mostrar las películas disponibles y permitir al usuario elegir cuál quiere ver. En esta fase los datos son mock (hardcodeados en el store de Pinia), sin conexión al backend todavía.

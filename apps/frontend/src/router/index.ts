@@ -14,6 +14,11 @@ const router = createRouter({
       name: 'movie-detail',
       component: () => import('../views/MovieDetailView.vue'),
     },
+    {
+      path: '/funciones/:showtimeId/butacas',
+      name: 'seats',
+      component: () => import('../views/SeatsView.vue'),
+    },
   ],
 })
 
