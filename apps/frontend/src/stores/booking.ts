@@ -18,11 +18,20 @@ const MOCK_SEAT_STATES: Record<string, Record<string, SeatState>> = {
   },
 }
 
+export interface LastPurchase {
+  movieTitle: string
+  sala: string
+  fechaHora: string
+  seats: string[]
+  precioBase: number
+}
+
 export const useBookingStore = defineStore('booking', {
   state: () => ({
     selectedSeats: [] as string[],
     seatStates: MOCK_SEAT_STATES as Record<string, Record<string, SeatState>>,
     currentShowtimeId: null as string | null,
+    lastPurchase: null as LastPurchase | null,
   }),
   getters: {
     totalAsientos: (state): number => state.selectedSeats.length,
@@ -41,6 +50,9 @@ export const useBookingStore = defineStore('booking', {
       } else {
         this.selectedSeats.splice(idx, 1)
       }
+    },
+    savePurchase(data: LastPurchase) {
+      this.lastPurchase = { ...data }
     },
     clearSelection() {
       this.selectedSeats = []

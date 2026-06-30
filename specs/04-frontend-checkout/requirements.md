@@ -3,8 +3,8 @@
 ## Estado
 - [x] Borrador
 - [x] Aprobado por el usuario
-- [ ] En implementación
-- [ ] Completado
+- [x] En implementación
+- [x] Completado
 
 ## Contexto
 El checkout es la pantalla donde el usuario revisa su compra y completa el pago. En esta fase el pago es completamente simulado — no hay integración con ninguna pasarela real. El objetivo es construir el flujo visual y la experiencia de usuario completa, para que en Fase E solo se reemplace la simulación por la llamada real al backend. También es acá donde en el futuro vivirá la lógica de idempotencia del lado del cliente (el header `Idempotency-Key`).

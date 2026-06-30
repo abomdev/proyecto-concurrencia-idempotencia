@@ -208,6 +208,13 @@ async function confirmar() {
   if (!formularioValido.value) return
   cargando.value = true
   await new Promise((resolve) => setTimeout(resolve, 1500))
+  bookingStore.savePurchase({
+    movieTitle: movie.value!.titulo,
+    sala: showtime.value!.sala,
+    fechaHora: showtime.value!.fechaHora,
+    seats: [...bookingStore.selectedSeats],
+    precioBase: showtime.value!.precioBase,
+  })
   bookingStore.clearSelection()
   router.push({ name: 'confirmation' })
 }
