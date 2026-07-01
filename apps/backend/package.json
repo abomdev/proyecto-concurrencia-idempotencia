@@ -7,7 +7,10 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "lint": "eslint . --ext .ts --fix",
-    "seed": "tsx src/seed/seed.ts"
+    "seed": "tsx src/seed/seed.ts",
+    "race-test": "tsx src/seed/raceConditionTest.ts",
+    "idempotency-test": "tsx src/seed/idempotencyTest.ts",
+    "test": "vitest run"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
@@ -26,6 +29,8 @@
     "@types/node": "^20.0.0",
     "ts-node-dev": "^2.0.0",
     "tsx": "^4.22.4",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "vite": "^5.4.0",
+    "vitest": "^2.1.0"
   }
 }
