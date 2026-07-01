@@ -3,8 +3,8 @@
 ## Estado
 - [x] Borrador
 - [x] Aprobado por el usuario
-- [ ] En implementación
-- [ ] Completado
+- [x] En implementación
+- [x] Completado
 
 ## Contexto
 Esta spec implementa los endpoints GET que el frontend consume y el script de seed que puebla la base de datos con las 4 películas de anime confirmadas por el usuario. Al terminar esta spec, el frontend puede conectarse al backend real y dejar de usar datos mock.

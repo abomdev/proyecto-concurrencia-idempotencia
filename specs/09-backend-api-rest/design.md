@@ -2,7 +2,7 @@
 
 ## Estado
 - [x] Borrador
-- [ ] Aprobado por el usuario
+- [x] Aprobado por el usuario
 
 ---
 
