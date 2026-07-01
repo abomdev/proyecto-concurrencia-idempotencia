@@ -5,15 +5,20 @@
     <main class="mis-tickets">
       <h1 class="mis-tickets__titulo">Mis tickets de {{ authStore.user?.nombre }}</h1>
 
+      <!-- Cargando -->
+      <div v-if="ticketsStore.loading" class="mis-tickets__spinner">
+        <ProgressSpinner />
+      </div>
+
       <!-- Estado vacío -->
-      <div v-if="ticketsStore.tickets.length === 0" class="mis-tickets__vacio">
+      <div v-else-if="ticketsStore.tickets.length === 0" class="mis-tickets__vacio">
         <p class="mis-tickets__vacio-texto">Aún no tienes tickets.</p>
         <p class="mis-tickets__vacio-subtexto">¡Compra tu primera entrada!</p>
         <Button label="Ver cartelera" @click="router.push('/')" />
       </div>
 
       <!-- Lista de tickets -->
-      <div v-else class="mis-tickets__lista">
+      <div v-else-if="ticketsStore.tickets.length > 0" class="mis-tickets__lista">
         <Card v-for="ticket in ticketsStore.tickets" :key="ticket._id" class="mis-tickets__card">
           <template #content>
             <div class="mis-tickets__card-header">
@@ -69,11 +74,13 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Card from 'primevue/card'
 import Chip from 'primevue/chip'
 import Divider from 'primevue/divider'
 import Button from 'primevue/button'
+import ProgressSpinner from 'primevue/progressspinner'
 import Navbar from '../components/Navbar.vue'
 import { useAuthStore } from '../stores/auth'
 import { useTicketsStore } from '../stores/tickets'
@@ -81,6 +88,10 @@ import { useTicketsStore } from '../stores/tickets'
 const router = useRouter()
 const authStore = useAuthStore()
 const ticketsStore = useTicketsStore()
+
+onMounted(() => {
+  ticketsStore.fetchMisTickets()
+})
 
 function formatearFecha(iso: string): string {
   return new Intl.DateTimeFormat('es-CL', {
@@ -113,6 +124,12 @@ function formatearPrecio(precio: number): string {
   font-weight: 700;
   margin: 0 0 1.5rem;
   text-transform: capitalize;
+}
+
+.mis-tickets__spinner {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
 }
 
 .mis-tickets__vacio {

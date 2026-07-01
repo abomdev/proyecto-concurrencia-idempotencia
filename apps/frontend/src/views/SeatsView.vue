@@ -149,11 +149,11 @@ function formatearPrecio(precio: number): string {
 }
 
 onMounted(() => {
-  // Si el usuario entra a una función diferente a la que tenía seleccionada, limpia la selección anterior
   if (bookingStore.currentShowtimeId !== showtimeId) {
     bookingStore.clearSelection()
   }
   bookingStore.currentShowtimeId = showtimeId
+  bookingStore.fetchSeatStates(showtimeId)
 })
 </script>
 

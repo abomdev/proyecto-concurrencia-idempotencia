@@ -4,9 +4,14 @@
 
     <main class="detalle">
       <!-- Estado de error -->
-      <div v-if="!movie" class="detalle__error">
+      <div v-if="!moviesStore.loading && !movie" class="detalle__error">
         <p>Película no encontrada.</p>
         <Button label="← Volver a cartelera" severity="secondary" @click="router.push('/')" />
+      </div>
+
+      <!-- Cargando -->
+      <div v-else-if="showtimesStore.loading || moviesStore.loading" class="detalle__spinner">
+        <ProgressSpinner />
       </div>
 
       <!-- Contenido normal -->
@@ -73,11 +78,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Chip from 'primevue/chip'
 import Divider from 'primevue/divider'
+import ProgressSpinner from 'primevue/progressspinner'
 import Navbar from '../components/Navbar.vue'
 import { useMoviesStore } from '../stores/movies'
 import { useShowtimesStore } from '../stores/showtimes'
@@ -90,7 +96,14 @@ const moviesStore = useMoviesStore()
 const movie = computed(() => moviesStore.movies.find((m) => m._id === movieId) ?? null)
 
 const showtimesStore = useShowtimesStore()
-const funciones = computed(() => showtimesStore.porPelicula(movieId))
+const funciones = computed(() => showtimesStore.showtimes)
+
+onMounted(async () => {
+  if (moviesStore.movies.length === 0) {
+    await moviesStore.fetchPeliculas()
+  }
+  showtimesStore.fetchFuncionesPorPelicula(movieId)
+})
 
 function seleccionarFuncion(showtimeId: string) {
   router.push({ name: 'seats', params: { showtimeId } })
@@ -120,6 +133,12 @@ function formatearPrecio(precio: number): string {
   max-width: 1100px;
   margin: 0 auto;
   padding: 2rem 1.5rem;
+}
+
+.detalle__spinner {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
 }
 
 .detalle__error {

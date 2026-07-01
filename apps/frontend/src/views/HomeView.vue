@@ -5,7 +5,15 @@
     <main class="cartelera">
       <h2 class="cartelera__titulo">En cartelera</h2>
 
-      <p v-if="peliculasActivas.length === 0" class="cartelera__vacio">
+      <div v-if="moviesStore.loading" class="cartelera__spinner">
+        <ProgressSpinner />
+      </div>
+
+      <p v-else-if="moviesStore.error" class="cartelera__vacio">
+        {{ moviesStore.error }}
+      </p>
+
+      <p v-else-if="peliculasActivas.length === 0" class="cartelera__vacio">
         No hay películas disponibles en cartelera.
       </p>
 
@@ -21,13 +29,19 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
+import ProgressSpinner from 'primevue/progressspinner'
 import Navbar from '../components/Navbar.vue'
 import MovieCard from '../components/MovieCard.vue'
 import { useMoviesStore } from '../stores/movies'
 
 const moviesStore = useMoviesStore()
 const { peliculasActivas } = storeToRefs(moviesStore)
+
+onMounted(() => {
+  moviesStore.fetchPeliculas()
+})
 </script>
 
 <style scoped>
@@ -41,6 +55,12 @@ const { peliculasActivas } = storeToRefs(moviesStore)
   font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
+}
+
+.cartelera__spinner {
+  display: flex;
+  justify-content: center;
+  padding: 4rem 0;
 }
 
 .cartelera__vacio {

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import api from '../services/api'
 
 export interface Ticket {
   _id: string
@@ -11,31 +12,20 @@ export interface Ticket {
   estado: 'confirmado' | 'cancelado'
 }
 
-const MOCK_TICKETS: Ticket[] = [
-  {
-    _id: 'ticket-1',
-    movieTitle: 'Kimetsu no Yaiba: El Castillo Infinito',
-    sala: 'Sala 1',
-    fechaHora: '2026-07-05T20:30:00',
-    seats: ['A4', 'B6'],
-    precioBase: 4500,
-    codigoReserva: 'CRK-A4F2B8',
-    estado: 'confirmado',
-  },
-  {
-    _id: 'ticket-2',
-    movieTitle: 'Jujutsu Kaisen: Ejecución',
-    sala: 'Sala 2',
-    fechaHora: '2026-06-28T18:00:00',
-    seats: ['C7'],
-    precioBase: 5000,
-    codigoReserva: 'CRK-X9M3K1',
-    estado: 'confirmado',
-  },
-]
-
 export const useTicketsStore = defineStore('tickets', {
   state: () => ({
-    tickets: MOCK_TICKETS as Ticket[],
+    tickets: [] as Ticket[],
+    loading: false,
   }),
+  actions: {
+    async fetchMisTickets() {
+      this.loading = true
+      try {
+        const { data } = await api.get<Ticket[]>('/api/mis-tickets')
+        this.tickets = data
+      } finally {
+        this.loading = false
+      }
+    },
+  },
 })

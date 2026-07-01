@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
+import api from '../services/api'
 
 export interface AuthUser {
+  _id: string
   nombre: string
   email: string
 }
@@ -18,22 +20,26 @@ export const useAuthStore = defineStore('auth', {
     isAuthenticated: (state): boolean => !!state.token,
   },
   actions: {
-    async login(email: string, _password: string) {
-      await new Promise((r) => setTimeout(r, 1000))
-      const nombre = email.split('@')[0]
-      const token = `mock.jwt.${btoa(email)}.${Date.now()}`
-      this.token = token
-      this.user = { nombre, email }
-      localStorage.setItem('crunchymark_token', token)
-      localStorage.setItem('crunchymark_user', JSON.stringify(this.user))
+    async login(email: string, password: string) {
+      const { data } = await api.post<{ token: string; user: AuthUser }>('/api/auth/login', {
+        email,
+        password,
+      })
+      this.token = data.token
+      this.user = data.user
+      localStorage.setItem('crunchymark_token', data.token)
+      localStorage.setItem('crunchymark_user', JSON.stringify(data.user))
     },
-    async registro(nombre: string, email: string, _password: string) {
-      await new Promise((r) => setTimeout(r, 1000))
-      const token = `mock.jwt.${btoa(email)}.${Date.now()}`
-      this.token = token
-      this.user = { nombre, email }
-      localStorage.setItem('crunchymark_token', token)
-      localStorage.setItem('crunchymark_user', JSON.stringify(this.user))
+    async registro(nombre: string, email: string, password: string) {
+      const { data } = await api.post<{ token: string; user: AuthUser }>('/api/auth/registro', {
+        nombre,
+        email,
+        password,
+      })
+      this.token = data.token
+      this.user = data.user
+      localStorage.setItem('crunchymark_token', data.token)
+      localStorage.setItem('crunchymark_user', JSON.stringify(data.user))
     },
     logout() {
       this.token = null
