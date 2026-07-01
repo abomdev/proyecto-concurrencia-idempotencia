@@ -11,6 +11,14 @@ export interface LastPurchase {
   fechaHora: string
   seats: string[]
   precioBase: number
+  codigoReserva: string
+}
+
+interface ReservaResponse {
+  codigoReserva: string
+  asientos: string[]
+  holdExpiresAt: string
+  precioTotal: number
 }
 
 export const useBookingStore = defineStore('booking', {
@@ -19,6 +27,7 @@ export const useBookingStore = defineStore('booking', {
     seatStates: {} as Record<string, Record<string, SeatState>>,
     currentShowtimeId: null as string | null,
     lastPurchase: null as LastPurchase | null,
+    pendingCodigoReserva: null as string | null,
   }),
   getters: {
     totalAsientos: (state): number => state.selectedSeats.length,
@@ -44,8 +53,27 @@ export const useBookingStore = defineStore('booking', {
         this.selectedSeats.splice(idx, 1)
       }
     },
-    savePurchase(data: LastPurchase) {
-      this.lastPurchase = { ...data }
+    async crearReserva(
+      showtimeId: string,
+      asientos: string[],
+      precioBase: number,
+      idempotencyKey: string,
+    ): Promise<string> {
+      const { data } = await api.post<ReservaResponse>(
+        '/api/reservas',
+        { showtimeId, asientos, precioBase },
+        { headers: { 'Idempotency-Key': idempotencyKey } },
+      )
+      this.pendingCodigoReserva = data.codigoReserva
+      return data.codigoReserva
+    },
+    async confirmarReserva(
+      codigoReserva: string,
+      purchaseData: Omit<LastPurchase, 'codigoReserva'>,
+    ): Promise<void> {
+      await api.post(`/api/reservas/${codigoReserva}/confirmar`)
+      this.lastPurchase = { ...purchaseData, codigoReserva }
+      this.pendingCodigoReserva = null
     },
     clearSelection() {
       this.selectedSeats = []

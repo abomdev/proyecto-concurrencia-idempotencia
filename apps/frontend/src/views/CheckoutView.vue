@@ -102,6 +102,9 @@
               </div>
             </div>
 
+            <!-- Error de reserva -->
+            <p v-if="errorMensaje" class="checkout__error">{{ errorMensaje }}</p>
+
             <!-- Estado de carga -->
             <div v-if="cargando" class="checkout__cargando">
               <ProgressSpinner style="width: 40px; height: 40px" />
@@ -160,6 +163,8 @@ const movie = computed(() =>
 )
 
 const cargando = ref(false)
+const errorMensaje = ref('')
+const idempotencyKey = crypto.randomUUID()
 
 const form = reactive({
   nombre: '',
@@ -205,18 +210,34 @@ function volver() {
 }
 
 async function confirmar() {
-  if (!formularioValido.value) return
+  if (!formularioValido.value || !showtime.value || !movie.value) return
   cargando.value = true
-  await new Promise((resolve) => setTimeout(resolve, 1500))
-  bookingStore.savePurchase({
-    movieTitle: movie.value!.titulo,
-    sala: showtime.value!.sala,
-    fechaHora: showtime.value!.fechaHora,
-    seats: [...bookingStore.selectedSeats],
-    precioBase: showtime.value!.precioBase,
-  })
-  bookingStore.clearSelection()
-  router.push({ name: 'confirmation' })
+  errorMensaje.value = ''
+  try {
+    const codigoReserva = await bookingStore.crearReserva(
+      bookingStore.currentShowtimeId!,
+      [...bookingStore.selectedSeats],
+      showtime.value.precioBase,
+      idempotencyKey,
+    )
+    await bookingStore.confirmarReserva(codigoReserva, {
+      movieTitle: movie.value.titulo,
+      sala: showtime.value.sala,
+      fechaHora: showtime.value.fechaHora,
+      seats: [...bookingStore.selectedSeats],
+      precioBase: showtime.value.precioBase,
+    })
+    bookingStore.clearSelection()
+    router.push({ name: 'confirmation' })
+  } catch (err: any) {
+    if (err.response?.status === 409) {
+      errorMensaje.value = err.response?.data?.error ?? 'Una o más butacas ya fueron reservadas.'
+    } else {
+      errorMensaje.value = 'Error al procesar el pago. Intenta nuevamente.'
+    }
+  } finally {
+    cargando.value = false
+  }
 }
 
 function formatearFecha(iso: string): string {
@@ -316,6 +337,13 @@ function formatearPrecio(precio: number): string {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
+}
+
+.checkout__error {
+  color: #ef4444;
+  font-size: 0.875rem;
+  margin: 0 0 0.75rem;
+  text-align: center;
 }
 
 .checkout__cargando {

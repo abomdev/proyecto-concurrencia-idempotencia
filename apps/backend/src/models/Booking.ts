@@ -12,7 +12,7 @@ const bookingSchema = new Schema(
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
     holdExpiresAt: { type: Date },
     confirmedAt: { type: Date },
-    idempotencyKey: { type: String },
+    codigoReserva: { type: String, index: true },
     precioFinal: { type: Number, required: true },
   },
   { timestamps: { createdAt: true, updatedAt: false } },

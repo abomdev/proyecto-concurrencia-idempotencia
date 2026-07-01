@@ -53,7 +53,7 @@
 
             <div class="confirmacion__codigo-wrapper">
               <p class="confirmacion__codigo-label">Código de reserva</p>
-              <div class="confirmacion__codigo">{{ codigoReserva }}</div>
+              <div class="confirmacion__codigo">{{ bookingStore.lastPurchase.codigoReserva }}</div>
             </div>
           </template>
         </Card>
@@ -69,7 +69,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
@@ -79,17 +78,6 @@ import { useBookingStore } from '../stores/booking'
 
 const router = useRouter()
 const bookingStore = useBookingStore()
-
-const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-const codigoReserva = ref('')
-
-onMounted(() => {
-  if (bookingStore.lastPurchase) {
-    codigoReserva.value =
-      'CRK-' +
-      Array.from({ length: 6 }, () => CHARS[Math.floor(Math.random() * CHARS.length)]).join('')
-  }
-})
 
 function formatearFecha(iso: string): string {
   return new Intl.DateTimeFormat('es-CL', {

@@ -6,6 +6,7 @@ import authRoutes from './routes/auth.routes'
 import moviesRoutes from './routes/movies.routes'
 import showtimesRoutes from './routes/showtimes.routes'
 import ticketsRoutes from './routes/tickets.routes'
+import bookingRoutes from './routes/booking.routes'
 
 const app = express()
 
@@ -20,6 +21,7 @@ app.use('/api/auth', authRoutes)
 app.use('/api/peliculas', moviesRoutes)
 app.use('/api/funciones', showtimesRoutes)
 app.use('/api/mis-tickets', ticketsRoutes)
+app.use('/api/reservas', bookingRoutes)
 
 connectDB()
   .then(() => {
