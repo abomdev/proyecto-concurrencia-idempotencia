@@ -1,0 +1,8 @@
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+**/*.test.ts
+apps/backend/src/seed
+**/coverage
+.git
