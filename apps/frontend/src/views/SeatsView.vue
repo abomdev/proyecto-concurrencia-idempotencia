@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import Button from 'primevue/button'
 import Card from 'primevue/card'
@@ -101,6 +101,8 @@ import SeatMap from '../components/SeatMap.vue'
 import { useShowtimesStore } from '../stores/showtimes'
 import { useMoviesStore } from '../stores/movies'
 import { useBookingStore } from '../stores/booking'
+import { useSocket } from '../composables/useSocket'
+import type { SeatState } from '../stores/booking'
 
 const route = useRoute()
 const router = useRouter()
@@ -148,12 +150,29 @@ function formatearPrecio(precio: number): string {
   }).format(precio)
 }
 
+const { connect, disconnect } = useSocket()
+
 onMounted(() => {
   if (bookingStore.currentShowtimeId !== showtimeId) {
     bookingStore.clearSelection()
   }
   bookingStore.currentShowtimeId = showtimeId
   bookingStore.fetchSeatStates(showtimeId)
+
+  const socket = connect()
+  socket.emit('join:showtime', showtimeId)
+  socket.on('seat:updated', ({ asiento, estado }: { asiento: string; estado: SeatState }) => {
+    if (!bookingStore.seatStates[showtimeId]) {
+      bookingStore.seatStates[showtimeId] = {}
+    }
+    bookingStore.seatStates[showtimeId][asiento] = estado
+  })
+})
+
+onUnmounted(() => {
+  const s = connect()
+  s.emit('leave:showtime', showtimeId)
+  disconnect()
 })
 </script>
 

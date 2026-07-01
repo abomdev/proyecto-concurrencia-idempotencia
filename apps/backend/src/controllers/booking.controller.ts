@@ -1,6 +1,7 @@
 import { Response } from 'express'
 import { AuthRequest } from '../middleware/auth.middleware'
 import { crearReserva, confirmarReserva } from '../services/booking.service'
+import { getIo } from '../socket/io'
 
 export async function createReserva(req: AuthRequest, res: Response): Promise<void> {
   const { showtimeId, asientos } = req.body as { showtimeId: string; asientos: string[] }
@@ -16,6 +17,12 @@ export async function createReserva(req: AuthRequest, res: Response): Promise<vo
 
   try {
     const result = await crearReserva(req.userId!, showtimeId, asientos, req.body.precioBase ?? 0)
+
+    const io = getIo()
+    for (const asiento of result.asientos) {
+      io.to(`showtime:${showtimeId}`).emit('seat:updated', { showtimeId, asiento, estado: 'held' })
+    }
+
     res.status(201).json(result)
   } catch (err: any) {
     const status = err.statusCode ?? 500

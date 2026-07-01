@@ -1,7 +1,9 @@
 import 'dotenv/config'
+import { createServer } from 'http'
 import express from 'express'
 import cors from 'cors'
 import { connectDB } from './config/db'
+import { initSocket } from './socket/seatEvents'
 import authRoutes from './routes/auth.routes'
 import moviesRoutes from './routes/movies.routes'
 import showtimesRoutes from './routes/showtimes.routes'
@@ -9,6 +11,8 @@ import ticketsRoutes from './routes/tickets.routes'
 import bookingRoutes from './routes/booking.routes'
 
 const app = express()
+const httpServer = createServer(app)
+initSocket(httpServer)
 
 app.use(cors())
 app.use(express.json())
@@ -25,7 +29,7 @@ app.use('/api/reservas', bookingRoutes)
 
 connectDB()
   .then(() => {
-    app.listen(process.env.PORT ?? 3000, () => {
+    httpServer.listen(process.env.PORT ?? 3000, () => {
       console.log(`Crunchymark API corriendo en http://localhost:${process.env.PORT ?? 3000}`)
     })
   })
